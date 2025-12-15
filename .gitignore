@@ -7,4 +7,4 @@
 application.properties
 logs/
 applcation.yml
-applcation-dev.yml
+application-dev.yml
