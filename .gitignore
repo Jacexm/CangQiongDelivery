@@ -6,5 +6,5 @@
 **/test
 application.properties
 logs/
-applcation.yml
+application.yml
 application-dev.yml
