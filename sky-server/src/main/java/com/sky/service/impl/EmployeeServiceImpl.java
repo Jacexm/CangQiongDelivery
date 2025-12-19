@@ -53,7 +53,6 @@ public class EmployeeServiceImpl implements EmployeeService {
         }
 
         //密码比对
-        // TODO 后期需要进行md5加密，然后再进行比对
         password = DigestUtils.md5DigestAsHex(password.getBytes());
         if (!password.equals(employee.getPassword())) {
             //密码错误
@@ -115,6 +114,19 @@ public class EmployeeServiceImpl implements EmployeeService {
         }
 
         return new PageResult(total, records);
-
     }
+    /**
+     * 修改员工状态
+     *
+     * @param status
+     * @param id
+     */
+    public void changeStatus(Integer status, Long id){
+        Employee employee = Employee.builder()
+                .status(status)
+                .id(id)
+                .build();
+        employeeMapper.updateStatusById(employee);
+    }
+
 }

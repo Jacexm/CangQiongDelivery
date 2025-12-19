@@ -12,7 +12,7 @@ import java.io.Serializable;
 public class Result<T> implements Serializable {
 
     private static final int SUCCESS_CODE = 1;
-    private static final int ERROR_CODE = 0;
+    private static final int ERROR_CODE = 500;
 
     private Integer code; //编码：1成功，0和其它数字为失败
     private String msg; //错误信息
