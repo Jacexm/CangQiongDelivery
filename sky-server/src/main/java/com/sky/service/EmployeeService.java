@@ -32,7 +32,7 @@ public interface EmployeeService {
      * @param status
      * @param id
      */
-    void changeStatus(Integer status, Long id);
+    void changeEmployeeStatus(Integer status, Long id);
 
     /**
      * 根据员工信息查询员工信息

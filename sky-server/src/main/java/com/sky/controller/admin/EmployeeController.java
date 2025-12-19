@@ -115,7 +115,7 @@ public class EmployeeController {
     @ApiOperation("员工状态修改")
     public Result<String> changeStatus(@PathVariable Integer status, @RequestParam Long id){
         log.info("修改员工状态：{},{}",status,id);
-        employeeService.changeStatus(status,id);
+        employeeService.changeEmployeeStatus(status,id);
         return Result.success();
     }
 

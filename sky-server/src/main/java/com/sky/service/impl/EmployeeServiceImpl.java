@@ -122,7 +122,7 @@ public class EmployeeServiceImpl implements EmployeeService {
      * @param status
      * @param id
      */
-    public void changeStatus(Integer status, Long id) {
+    public void changeEmployeeStatus(Integer status, Long id) {
         Employee employee = Employee.builder()
                 .status(status)
                 .id(id)
