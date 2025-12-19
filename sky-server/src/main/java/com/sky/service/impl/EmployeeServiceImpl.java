@@ -75,7 +75,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     public void save(EmployeeDTO employeeDTO) {
         Employee employee = new Employee();
         // 拷贝对象的属性
-        BeanUtils.copyProperties(employeeDTO,employee);
+        BeanUtils.copyProperties(employeeDTO, employee);
         // 设置账户状态为启用状态
         employee.setStatus(StatusConstant.ENABLE);
         // 设置初始密码，并进行MD5加密
@@ -115,18 +115,43 @@ public class EmployeeServiceImpl implements EmployeeService {
 
         return new PageResult(total, records);
     }
+
     /**
      * 修改员工状态
      *
      * @param status
      * @param id
      */
-    public void changeStatus(Integer status, Long id){
+    public void changeStatus(Integer status, Long id) {
         Employee employee = Employee.builder()
                 .status(status)
                 .id(id)
                 .build();
-        employeeMapper.updateStatusById(employee);
+        employeeMapper.updateEmployeeById(employee);
     }
 
+    /**
+     * 根据员工信息查询员工信息
+     *
+     * @param id
+     * @return
+     */
+    public Employee getById(Long id) {
+        return employeeMapper.getById(id);
+    }
+
+    /**
+     * 修改员工信息
+     *
+     * @param employeeDTO
+     */
+    public void updateEmployee(EmployeeDTO employeeDTO) {
+        Employee employee = new Employee();
+        BeanUtils.copyProperties(employeeDTO, employee);
+        // 设置修改时间为当前时间
+        employee.setUpdateTime(LocalDateTime.now());
+        // 设置修改人ID为当前登录用户的ID
+        employee.setUpdateUser(BaseContext.getCurrentId());
+        employeeMapper.updateEmployeeById(employee);
+    }
 }

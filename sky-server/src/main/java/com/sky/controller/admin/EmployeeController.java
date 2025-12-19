@@ -104,7 +104,13 @@ public class EmployeeController {
     }
 
 
-
+    /**
+     * 员工状态修改
+     *
+     * @param status
+     * @param id
+     * @return
+     */
     @PostMapping("/status/{status}")
     @ApiOperation("员工状态修改")
     public Result<String> changeStatus(@PathVariable Integer status, @RequestParam Long id){
@@ -112,6 +118,33 @@ public class EmployeeController {
         employeeService.changeStatus(status,id);
         return Result.success();
     }
+
+
+
+    /**
+     * 根据员工信息查询员工信息
+     *
+     * @param id
+     * @return
+     */
+    @GetMapping("/{id}")
+    @ApiOperation("根据员工信息查询员工信息")
+    public Result<Employee> getById(@PathVariable Long id) {
+    log.info("根据员工信息查询员工信息：{}", id);
+    Employee employee = employeeService.getById(id);
+    employee.setPassword("****");
+    return Result.success(employee);
+    }
+
+    @PutMapping
+    @ApiOperation("修改员工信息")
+    public Result updateEmployee(@RequestBody EmployeeDTO employeeDTO) {
+        log.info("修改员工信息：{}", employeeDTO);
+        employeeService.updateEmployee(employeeDTO);
+        return Result.success();
+    }
+
+
 
 
 
