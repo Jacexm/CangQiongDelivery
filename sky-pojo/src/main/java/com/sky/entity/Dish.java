@@ -31,7 +31,7 @@ public class Dish implements Serializable {
     private BigDecimal price;
 
     //图片
-    private String image;
+    private String imgUrl;
 
     //描述信息
     private String description;
