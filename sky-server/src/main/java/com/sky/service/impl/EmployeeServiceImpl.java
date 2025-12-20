@@ -1,17 +1,31 @@
 package com.sky.service.impl;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.Page;
+
 import com.sky.constant.MessageConstant;
+import com.sky.constant.PasswordConstant;
 import com.sky.constant.StatusConstant;
+import com.sky.context.UserContext;
+import com.sky.dto.EmployeeDTO;
 import com.sky.dto.EmployeeLoginDTO;
+import com.sky.dto.EmployeePageQueryDTO;
 import com.sky.entity.Employee;
 import com.sky.exception.AccountLockedException;
 import com.sky.exception.AccountNotFoundException;
 import com.sky.exception.PasswordErrorException;
 import com.sky.mapper.EmployeeMapper;
+import com.sky.result.PageResult;
 import com.sky.service.EmployeeService;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
+
+import java.nio.charset.StandardCharsets;
+import java.time.LocalDateTime;
+import java.util.List;
+
 
 @Service
 public class EmployeeServiceImpl implements EmployeeService {
@@ -39,7 +53,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         }
 
         //密码比对
-        // TODO 后期需要进行md5加密，然后再进行比对
+        password = DigestUtils.md5DigestAsHex(password.getBytes());
         if (!password.equals(employee.getPassword())) {
             //密码错误
             throw new PasswordErrorException(MessageConstant.PASSWORD_ERROR);
@@ -49,9 +63,95 @@ public class EmployeeServiceImpl implements EmployeeService {
             //账号被锁定
             throw new AccountLockedException(MessageConstant.ACCOUNT_LOCKED);
         }
-
         //3、返回实体对象
         return employee;
     }
 
+    /**
+     * 保存员工信息
+     *
+     * @param employeeDTO 新增的员工信息
+     */
+    public void save(EmployeeDTO employeeDTO) {
+        Employee employee = new Employee();
+        // 拷贝对象的属性
+        BeanUtils.copyProperties(employeeDTO, employee);
+        // 设置账户状态为启用状态
+        employee.setStatus(StatusConstant.ENABLE);
+        // 设置初始密码，并进行MD5加密
+        employee.setPassword(DigestUtils.md5DigestAsHex(
+                PasswordConstant.DEFAULT_PASSWORD.getBytes(StandardCharsets.UTF_8)));
+
+//        // 更新数据库的附属信息
+//        employee.setCreateTime(LocalDateTime.now());
+//        employee.setUpdateTime(LocalDateTime.now());
+//        // 设置当前记录的创建人ID和修改人ID
+//        employee.setCreateUser(UserContext.getCurrentId());
+//        employee.setUpdateUser(UserContext.getCurrentId());
+
+        // 保存员工信息到数据库
+        employeeMapper.insert(employee);
+    }
+
+    /**
+     * 员工分页查询
+     *
+     * @param employeePageQueryDTO
+     * @return
+     */
+    public PageResult pageQuery(EmployeePageQueryDTO employeePageQueryDTO) {
+        PageHelper.startPage(employeePageQueryDTO.getPage(), employeePageQueryDTO.getPageSize());
+
+        long total = 0;
+        List<Employee> records = null;
+
+        try {
+            Page<Employee> page = employeeMapper.pageQuery(employeePageQueryDTO);
+            total = page.getTotal();
+            records = page.getResult();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+        return new PageResult(total, records);
+    }
+
+    /**
+     * 修改员工状态
+     *
+     * @param status
+     * @param id
+     */
+    public void changeEmployeeStatus(Integer status, Long id) {
+        Employee employee = Employee.builder()
+                .status(status)
+                .id(id)
+                .build();
+        employeeMapper.updateEmployeeById(employee);
+    }
+
+    /**
+     * 根据员工信息查询员工信息
+     *
+     * @param id
+     * @return
+     */
+    public Employee getById(Long id) {
+        return employeeMapper.getById(id);
+    }
+
+    /**
+     * 修改员工信息
+     *
+     * @param employeeDTO
+     */
+    public void updateEmployee(EmployeeDTO employeeDTO) {
+        Employee employee = new Employee();
+        BeanUtils.copyProperties(employeeDTO, employee);
+//        // 设置修改时间为当前时间
+//        employee.setUpdateTime(LocalDateTime.now());
+//        // 设置修改人ID为当前登录用户的ID
+//        employee.setUpdateUser(UserContext.getCurrentId());
+        employeeMapper.updateEmployeeById(employee);
+    }
 }

@@ -3,5 +3,12 @@
 *.iml
 *.class
 *Test.java
-**/test/
+**/test
+application.properties
+logs/
+application.yml
+application-dev.yml
+TraceID_*.md
+INDEX.md
 .DS_Store
+*.log
