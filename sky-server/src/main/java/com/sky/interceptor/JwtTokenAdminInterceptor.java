@@ -2,7 +2,7 @@ package com.sky.interceptor;
 
 import com.sky.constant.HttpResponeCodeConstant;
 import com.sky.constant.JwtClaimsConstant;
-import com.sky.context.BaseContext;
+import com.sky.context.UserContext;
 import com.sky.properties.JwtProperties;
 import com.sky.utils.JwtUtil;
 import io.jsonwebtoken.Claims;
@@ -51,7 +51,7 @@ public class JwtTokenAdminInterceptor implements HandlerInterceptor {
 
             log.info("当前员工id：", empId);
             //存储员工id到ThreadLocal
-            BaseContext.setCurrentId(empId);
+            UserContext.setCurrentId(empId);
             //3、通过，放行
             return true;
         } catch (Exception ex) {

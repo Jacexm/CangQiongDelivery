@@ -6,7 +6,7 @@ import com.github.pagehelper.Page;
 import com.sky.constant.MessageConstant;
 import com.sky.constant.PasswordConstant;
 import com.sky.constant.StatusConstant;
-import com.sky.context.BaseContext;
+import com.sky.context.UserContext;
 import com.sky.dto.EmployeeDTO;
 import com.sky.dto.EmployeeLoginDTO;
 import com.sky.dto.EmployeePageQueryDTO;
@@ -82,12 +82,12 @@ public class EmployeeServiceImpl implements EmployeeService {
         employee.setPassword(DigestUtils.md5DigestAsHex(
                 PasswordConstant.DEFAULT_PASSWORD.getBytes(StandardCharsets.UTF_8)));
 
-        // 更新数据库的附属信息
-        employee.setCreateTime(LocalDateTime.now());
-        employee.setUpdateTime(LocalDateTime.now());
-        // 设置当前记录的创建人ID和修改人ID
-        employee.setCreateUser(BaseContext.getCurrentId());
-        employee.setUpdateUser(BaseContext.getCurrentId());
+//        // 更新数据库的附属信息
+//        employee.setCreateTime(LocalDateTime.now());
+//        employee.setUpdateTime(LocalDateTime.now());
+//        // 设置当前记录的创建人ID和修改人ID
+//        employee.setCreateUser(UserContext.getCurrentId());
+//        employee.setUpdateUser(UserContext.getCurrentId());
 
         // 保存员工信息到数据库
         employeeMapper.insert(employee);
@@ -148,10 +148,10 @@ public class EmployeeServiceImpl implements EmployeeService {
     public void updateEmployee(EmployeeDTO employeeDTO) {
         Employee employee = new Employee();
         BeanUtils.copyProperties(employeeDTO, employee);
-        // 设置修改时间为当前时间
-        employee.setUpdateTime(LocalDateTime.now());
-        // 设置修改人ID为当前登录用户的ID
-        employee.setUpdateUser(BaseContext.getCurrentId());
+//        // 设置修改时间为当前时间
+//        employee.setUpdateTime(LocalDateTime.now());
+//        // 设置修改人ID为当前登录用户的ID
+//        employee.setUpdateUser(UserContext.getCurrentId());
         employeeMapper.updateEmployeeById(employee);
     }
 }
