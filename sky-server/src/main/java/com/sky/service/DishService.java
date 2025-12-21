@@ -4,6 +4,7 @@ import com.sky.dto.DishDTO;
 import com.sky.dto.DishPageQueryDTO;
 import com.sky.result.PageResult;
 import com.sky.result.Result;
+import com.sky.vo.DishVO;
 
 import java.util.List;
 
@@ -35,5 +36,20 @@ public interface DishService {
      * @param id
      */
     void updateStatus(Integer status, Long id);
+
+
+    /**
+     * 根据id查询菜品信息
+     * @param id
+     * @return DishDTO
+     */
+    DishVO getByIdWithFlavor(Long id);
+
+
+    /**
+     * 修改菜品信息
+     * @param dishDTO
+     */
+    void updateDishWithFlavor(DishDTO dishDTO);
 
 }

@@ -62,4 +62,11 @@ public interface DishMapper {
      */
     @AutoFill(value = OperationType.UPDATE)
     void updateDishStatusById(Dish dish);
+
+    /**
+     * 根据id修改菜品数据
+     * @param dish
+     */
+    @AutoFill(value = OperationType.UPDATE)
+    void updateDishById(Dish dish);
 }
