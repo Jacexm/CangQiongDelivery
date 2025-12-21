@@ -1,7 +1,42 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.sky.mapper.DishMapper">
 
+<mapper namespace="com.sky.mapper.DishMapper">
+    <resultMap id="DishVOResultMap" type="com.sky.vo.DishVO">
+        <result column="img_url" property="image"/>
+    </resultMap>
+
+    <select id="pageQuery" resultMap="DishVOResultMap">
+        select d.*, c.name as categoryName
+        from dish d
+        left join category c on d.category_id = c.id
+        <where>
+            <if test="name != null">
+                and d.name like concat('%',#{name},'%')
+            </if>
+            <if test="categoryId != null">
+                and d.category_id = #{categoryId}
+            </if>
+            <if test="status != null">
+                and d.status = #{status}
+            </if>
+        </where>
+        order by d.create_time desc
+    </select>
+
+    <update id="updateDishStatusById">
+        update dish
+        set status = #{status}
+        where id = #{id}
+    </update>
+
+    <delete id="deleteDish">
+        delete from dish
+        where id in
+        <foreach collection="ids" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
 
 </mapper>
