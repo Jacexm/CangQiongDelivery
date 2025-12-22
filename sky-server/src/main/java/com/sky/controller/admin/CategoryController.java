@@ -33,7 +33,6 @@ public class CategoryController {
     @PostMapping
     @ApiOperation("新增分类")
     public Result<String> addCategory(@RequestBody CategoryDTO categoryDTO){
-        log.info("新增分类：{}", categoryDTO);
         categoryService.addCategory(categoryDTO);
         return Result.success();
     }
@@ -46,7 +45,6 @@ public class CategoryController {
     @GetMapping("/page")
     @ApiOperation("分类分页查询")
     public Result<PageResult> pageQueryCategory(CategoryPageQueryDTO categoryPageQueryDTO){
-        log.info("分类分页查询：{}", categoryPageQueryDTO);
         PageResult pageResult = categoryService.pageQuery(categoryPageQueryDTO);
         return Result.success(pageResult);
     }
@@ -59,7 +57,6 @@ public class CategoryController {
     @DeleteMapping("/{id}")
     @ApiOperation("根据id删除分类")
     public Result<String> deleteById(@PathVariable Long id){
-        log.info("根据id删除分类：{}", id);
         categoryService.deleteById(id);
         return Result.success();
     }
@@ -72,7 +69,6 @@ public class CategoryController {
     @PutMapping
     @ApiOperation("修改分类信息")
     public Result<String> updateCategory(@RequestBody CategoryDTO categoryDTO) {
-        log.info("修改分类信息：{}", categoryDTO);
         categoryService.updateCategory(categoryDTO);
         return Result.success();
     }
@@ -86,7 +82,6 @@ public class CategoryController {
     @PostMapping("/status/{status}")
     @ApiOperation("修改分类状态")
     public Result<String> changeCategoryStatus(@PathVariable Integer status, @RequestParam Long id) {
-        log.info("修改分类状态：{},{}", status, id);
         categoryService.changeCategoryStatus(status, id);
         return Result.success();
     }
@@ -99,7 +94,7 @@ public class CategoryController {
     @GetMapping("/list")
     @ApiOperation("根据类型查询分类")
     public Result<List<Category>> queryByType(@RequestParam Integer type){
-        log.info("根据类型查询分类：{}", type);
+//        log.info("根据类型查询分类：{}", type);
         List<Category> categoryList = categoryService.listByType(type);
         return Result.success(categoryList);
     }

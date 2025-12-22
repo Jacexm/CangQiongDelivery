@@ -32,7 +32,7 @@ public class CommonController {
     @PostMapping("/upload")
     @ApiOperation("文件上传")
     public Result<String> upload(MultipartFile file) {
-        log.info("文件上传：name={},sie={}", file.getOriginalFilename(), file.getSize());
+//        log.info("文件上传：name={},sie={}", file.getOriginalFilename(), file.getSize());
 
         try {
             // 原始文件名称

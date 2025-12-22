@@ -41,7 +41,7 @@ public class EmployeeController {
      */
     @PostMapping("/login")
     public Result<EmployeeLoginVO> login(@RequestBody EmployeeLoginDTO employeeLoginDTO) {
-        log.info("员工登录：{}", employeeLoginDTO);
+//        log.info("员工登录：{}", employeeLoginDTO);
 
         Employee employee = employeeService.login(employeeLoginDTO);
 
@@ -83,7 +83,7 @@ public class EmployeeController {
     @PostMapping
     @ApiOperation("新增员工")
     public Result addEmployee(@RequestBody EmployeeDTO employeeDto){
-        log.info("新增员工：{}",employeeDto);
+//        log.info("新增员工：{}",employeeDto);
         employeeService.save(employeeDto);
         return Result.success();
     }
@@ -114,7 +114,7 @@ public class EmployeeController {
     @PostMapping("/status/{status}")
     @ApiOperation("员工状态修改")
     public Result<String> changeStatus(@PathVariable Integer status, @RequestParam Long id){
-        log.info("修改员工状态：{},{}",status,id);
+//        log.info("修改员工状态：{},{}",status,id);
         employeeService.changeEmployeeStatus(status,id);
         return Result.success();
     }
@@ -130,7 +130,7 @@ public class EmployeeController {
     @GetMapping("/{id}")
     @ApiOperation("根据员工信息查询员工信息")
     public Result<Employee> getById(@PathVariable Long id) {
-    log.info("根据员工信息查询员工信息：{}", id);
+//    log.info("根据员工信息查询员工信息：{}", id);
     Employee employee = employeeService.getById(id);
     employee.setPassword("****");
     return Result.success(employee);
@@ -139,7 +139,7 @@ public class EmployeeController {
     @PutMapping
     @ApiOperation("修改员工信息")
     public Result updateEmployee(@RequestBody EmployeeDTO employeeDTO) {
-        log.info("修改员工信息：{}", employeeDTO);
+//        log.info("修改员工信息：{}", employeeDTO);
         employeeService.updateEmployee(employeeDTO);
         return Result.success();
     }
