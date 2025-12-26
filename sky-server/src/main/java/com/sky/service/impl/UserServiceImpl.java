@@ -7,6 +7,7 @@ import com.sky.constant.WeChatLoginConstant;
 import com.sky.dto.UserLoginDTO;
 import com.sky.entity.User;
 import com.sky.exception.LoginFailedException;
+import com.sky.exception.WeChatLoginException;
 import com.sky.mapper.UserMapper;
 import com.sky.properties.WeChatProperties;
 import com.sky.service.UserService;
@@ -30,7 +31,11 @@ public class UserServiceImpl implements  UserService{
     @Autowired
     private UserMapper userMapper;
 
-
+    /**
+     * 小程序用户登录
+     * @param userLoginDTO
+     * @return
+     */
     public User userWechatLogin(UserLoginDTO userLoginDTO) {
 
         String userLoginCode = userLoginDTO.getCode();
@@ -84,6 +89,11 @@ public class UserServiceImpl implements  UserService{
                 wechatLioginParams);
 
         JSONObject jsonObject = JSON.parseObject(wechatLoginResponse);
+        if (jsonObject.getInteger("errcode") != null) {
+            Integer errCode = jsonObject.getInteger("errcode");
+            String errMsg = jsonObject.getString("errmsg");
+            throw new WeChatLoginException( errCode,errMsg);
+        }
         String wechatOpenId = jsonObject.getString("openid");
         return wechatOpenId;
     }
