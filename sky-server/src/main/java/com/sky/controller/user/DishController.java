@@ -1,6 +1,7 @@
 package com.sky.controller.user;
 
 
+import com.sky.constant.RedisKeysConstant;
 import com.sky.entity.Dish;
 import com.sky.result.Result;
 import com.sky.service.DishService;
@@ -29,7 +30,16 @@ public class DishController {
     @GetMapping("/list")
     @ApiOperation("依据categoryId获取菜品列表")
     public Result<List<DishVO>> listDishes(@RequestParam Long categoryId){
+
+        String dishKey = RedisKeysConstant.DISH_BY_CATERGORYID_KEY + categoryId;
+
+        List<DishVO> dishCaches = dishService.getDishCacheByKey(dishKey);
+        if(dishCaches != null && !dishCaches.isEmpty()){
+            log.info("从缓存中获取菜品列表，categoryId：{}", categoryId);
+            return Result.success(dishCaches);
+        }
         List<DishVO> dishVOs = dishService.listDishesByCategoryId(categoryId);
+        dishService.setDishCacheByKey(dishKey, dishVOs);
 
         return Result.success(dishVOs);
     }

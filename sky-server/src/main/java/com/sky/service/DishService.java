@@ -29,7 +29,6 @@ public interface DishService {
      */
     void deleteDish(List<Long> ids);
 
-
     /**
      * 修改菜品状态
      * @param status
@@ -58,5 +57,22 @@ public interface DishService {
      * @return
      */
     List<DishVO> listDishesByCategoryId(Long categoryId);
+
+    /**
+     * 根据key获取菜品缓存
+     * @param key
+     * @return
+     */
+    List<DishVO> getDishCacheByKey(String key);
+
+    /**
+     * 根据key设置菜品缓存
+     * @param key
+     * @param dishVOs
+     */
+    void setDishCacheByKey(String key, List<DishVO> dishVOs);
+
+
+    void clearDishCache(String pattern);
 
 }
