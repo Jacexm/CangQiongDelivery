@@ -10,10 +10,11 @@ import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.cache.annotation.Cacheable;
 
 import java.util.List;
 
-@RestController
+@RestController("userSetmealController")
 @RequestMapping("/user/setmeal")
 @Api(tags = "用户端-套餐相关接口")
 @Slf4j
@@ -28,6 +29,7 @@ public class SetmealController {
      */
     @GetMapping("/list")
     @ApiOperation("获取套餐列表及其包含的菜品信息")
+    @Cacheable(cacheNames = "setmealCache", key = "#categoryId")
     public Result<List<Setmeal>> listSetmeals(@RequestParam Long categoryId){
         List<Setmeal> setmeals = setmealService.listSetmealByCategoryId(categoryId);
 

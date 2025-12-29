@@ -351,5 +351,15 @@ public class DishServiceImpl implements DishService {
         }
     }
 
+//    /**
+//     * 根据分类id查询菜品
+//     * @param categoryId
+//     * @return java.util.List<com.sky.entity.Dish>
+//     **/
+//    @Override
+//    public List<Dish> getByCategoryId(Integer categoryId) {
+//        return dishMapper.getByCategoryId(categoryId);
+//    }
+
 
 }
