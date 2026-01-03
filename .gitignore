@@ -19,3 +19,7 @@ config/
 !.env.example
 *.md
 
+/verify-config.sh
+/build-docker.sh
+/.env.example
+/.mvn/

@@ -27,3 +27,22 @@ sky:
     notifyUrl: ${WECHAT_NOTIFY_URL}
     refundNotifyUrl: ${WECHAT_REFUND_NOTIFY_URL}
 
+# Actuator & Prometheus 监控配置
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus
+      base-path: /actuator
+  endpoint:
+    health:
+      show-details: always
+    prometheus:
+      enabled: true
+  metrics:
+    export:
+      prometheus:
+        enabled: true
+    tags:
+      application: sky-take-out
+      environment: docker
