@@ -12,3 +12,10 @@ TraceID_*.md
 INDEX.md
 .DS_Store
 *.log
+
+# Docker related
+.env
+config/
+!.env.example
+DOCKER_DEPLOYMENT.md
+*.md

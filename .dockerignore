@@ -1,0 +1,56 @@
+# Maven
+target/
+!.mvn/wrapper/maven-wrapper.jar
+.mvn/
+mvnw
+mvnw.cmd
+
+# IDE
+.idea/
+*.iml
+*.iws
+*.ipr
+.vscode/
+.DS_Store
+
+# Logs
+logs/
+*.log
+
+# Git
+.git/
+.gitignore
+.gitattributes
+
+# Docker
+Dockerfile
+.dockerignore
+docker-compose.yml
+build-docker.sh
+
+# Documentation
+*.md
+README*
+INDEX.md
+TraceID*.md
+CONFIG_PRINCIPLE.md
+DOCKER*.md
+
+# Scripts
+*.sh
+verify-config.sh
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# Temporary files
+*.tmp
+*.bak
+*.swp
+*~
+
+# Test files
+**/src/test/
+
