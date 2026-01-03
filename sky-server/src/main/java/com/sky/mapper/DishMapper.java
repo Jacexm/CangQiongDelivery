@@ -69,4 +69,30 @@ public interface DishMapper {
      */
     @AutoFill(value = OperationType.UPDATE)
     void updateDishById(Dish dish);
+
+    /**
+     * 根据分类id查询菜品
+     * @param dish
+     * @return
+     */
+    @Select("select * from dish where category_id = #{categoryId} and status = #{status}")
+    List<Dish> getByCategoryId(Dish dish);
+
+    /**
+     * 根据套餐ID查询菜品信息
+     * @param setmealId
+     * @return java.util.List<com.sky.entity.Dish>
+     **/
+    @Select("select d.* from setmeal_dish sd left join dish d on sd.dish_id = d.id where sd.setmeal_id = #{setmealId}")
+    List<Dish> getBySetmealId(Long setmealId);
+
+    /**
+     * 根据分类id查询菜品
+     * @param categoryId
+     * @return java.util.List<com.sky.entity.Dish>
+     **/
+
+//    @Select("select * from dish where category_id = #{categoryId} and status=1 ")
+//    List<Dish> getByCategoryId(Integer categoryId);
+
 }

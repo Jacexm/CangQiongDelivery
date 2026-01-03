@@ -9,6 +9,13 @@ logs/
 application.yml
 application-dev.yml
 TraceID_*.md
-INDEX.md
+markdown/INDEX.md
 .DS_Store
 *.log
+
+# Docker related
+.env
+config/
+!.env.example
+*.md
+

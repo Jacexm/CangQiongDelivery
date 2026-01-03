@@ -30,7 +30,7 @@ public class ShopController {
     @ApiOperation("设置店铺的营业状态")
     public Result updateShopStatus(@PathVariable Integer status){
         log.info("用户{}设置店铺的营业状态：{}", UserContext.getCurrentId(), status==1 ? "营业中":"打烊中");
-        redisTemplate.opsForValue().set(KEY,status);
+        redisTemplate.opsForValue().set(KEY, status);
         return Result.success();
     }
     /**
@@ -40,7 +40,16 @@ public class ShopController {
     @GetMapping("/status")
     @ApiOperation("获取店铺的营业状态")
     public Result<Integer> getShopStatus(){
-        Integer status = (Integer) redisTemplate.opsForValue().get(KEY);
+        Integer status = 0; // 默认值为打烊中
+
+        try {
+            Object obj = redisTemplate.opsForValue().get(KEY);
+            status = obj != null ? (Integer) obj : 0;
+        } catch (Exception e) {
+            log.warn("获取Redis店铺状态异常，使用默认值（打烊中）", e);
+            status = 0;
+        }
+
         log.info("用户{} 获取店铺的营业状态：{}", UserContext.getCurrentId(), status==1 ? "营业中":"打烊中");
         return Result.success(status);
     }

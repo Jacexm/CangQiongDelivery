@@ -1,0 +1,93 @@
+services:
+  sky-server:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: sky-take-out:latest
+    container_name: sky-server
+    restart: unless-stopped
+
+    # 环境变量配置
+    env_file:
+      - .env
+
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - TZ=Asia/Shanghai
+
+    # 端口映射
+    ports:
+      - "8080:8080"
+
+    # 卷挂载
+    volumes:
+      # 日志持久化
+      - ./logs:/app/logs
+      # 配置文件挂载（如微信支付证书）
+      - ./config:/app/config:ro
+
+    # 网络配置
+    networks:
+      - sky-nginx_sky-network
+
+    # 健康检查
+    healthcheck:
+      test: ["CMD", "sh", "-c", "pgrep -f 'java.*app.jar' > /dev/null || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+
+    # 资源限制
+    # 注意: OrbStack 自动管理资源，如需限制请取消注释并调整
+    # deploy:
+    #   resources:
+    #     limits:
+    #       cpus: '1.0'
+    #       memory: 2G
+    #     reservations:
+    #       cpus: '0.25'
+    #       memory: 512M
+
+    # 依赖服务（如果需要在同一个 compose 中启动 MySQL 和 Redis）
+    # depends_on:
+    #   - mysql
+    #   - redis
+
+  # 可选：如果需要在本地运行 MySQL
+  # mysql:
+  #   image: mysql:8.0
+  #   container_name: sky-mysql
+  #   restart: unless-stopped
+  #   environment:
+  #     MYSQL_ROOT_PASSWORD: ${MYSQL_PASSWORD}
+  #     MYSQL_DATABASE: ${MYSQL_DATABASE}
+  #     TZ: Asia/Shanghai
+  #   ports:
+  #     - "23306:3306"
+  #   volumes:
+  #     - mysql-data:/var/lib/mysql
+  #   networks:
+  #     - sky-network
+
+  # 可选：如果需要在本地运行 Redis
+  # redis:
+  #   image: redis:7-alpine
+  #   container_name: sky-redis
+  #   restart: unless-stopped
+  #   command: redis-server --requirepass ${REDIS_PASSWORD}
+  #   ports:
+  #     - "6380:6379"
+  #   volumes:
+  #     - redis-data:/data
+  #   networks:
+  #     - sky-network
+
+networks:
+  sky-nginx_sky-network:
+    external: true
+
+# volumes:
+#   mysql-data:
+#   redis-data:
+

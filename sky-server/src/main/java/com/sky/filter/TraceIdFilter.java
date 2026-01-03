@@ -96,7 +96,7 @@ public class TraceIdFilter extends OncePerRequestFilter {
         try {
             // 步骤1: 将TraceID放入MDC
             MDC.put(TRACE_ID_KEY, traceId);
-            log.info("TraceID bound to MDC: {} (isNew: {})", traceId, isNewTraceId);
+            log.debug("TraceID bound to MDC: {} (isNew: {})", traceId, isNewTraceId);
 
             // 步骤2: 将TraceID添加到响应头
             // 客户端可以通过响应头获取TraceID，便于端到端追踪
@@ -130,7 +130,7 @@ public class TraceIdFilter extends OncePerRequestFilter {
             // 可选：同时清理可能的其他MDC值，防止线程池复用时的信息污染
             // 注意：这里使用remove而不是clear，只清理traceId，保留其他业务上下文
 
-            log.info("TraceID removed from MDC: {}", traceId);
+            log.debug("TraceID removed from MDC: {}", traceId);
         }
     }
 
