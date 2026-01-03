@@ -9,7 +9,7 @@ logs/
 application.yml
 application-dev.yml
 TraceID_*.md
-INDEX.md
+markdown/INDEX.md
 .DS_Store
 *.log
 
@@ -17,5 +17,5 @@ INDEX.md
 .env
 config/
 !.env.example
-DOCKER_DEPLOYMENT.md
 *.md
+
