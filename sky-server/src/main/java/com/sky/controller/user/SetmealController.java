@@ -5,8 +5,9 @@ import com.sky.result.Result;
 import com.sky.service.SetmealService;
 import com.sky.vo.DishItemVO;
 import com.sky.vo.SetmealVO;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -16,7 +17,7 @@ import java.util.List;
 
 @RestController("userSetmealController")
 @RequestMapping("/user/setmeal")
-@Api(tags = "用户端-套餐相关接口")
+@Tag(name = "用户端-套餐相关接口")
 @Slf4j
 public class SetmealController {
 
@@ -28,7 +29,7 @@ public class SetmealController {
      * @return 套餐列表
      */
     @GetMapping("/list")
-    @ApiOperation("获取套餐列表及其包含的菜品信息")
+    @Operation(summary = "获取套餐列表及其包含的菜品信息")
     @Cacheable(cacheNames = "setmealCache", key = "#categoryId")
     public Result<List<Setmeal>> listSetmeals(@RequestParam Long categoryId){
         List<Setmeal> setmeals = setmealService.listSetmealByCategoryId(categoryId);
@@ -37,7 +38,7 @@ public class SetmealController {
     }
 
     @GetMapping("/dish/{id}")
-    @ApiOperation("依据套餐id获取套餐内菜品信息")
+    @Operation(summary = "依据套餐id获取套餐内菜品信息")
     public Result<List<DishItemVO>> dishList(@PathVariable("id") Long id){
         List<DishItemVO> dishItemVOS = setmealService.getDishItemById(id);
         return Result.success(dishItemVOS);

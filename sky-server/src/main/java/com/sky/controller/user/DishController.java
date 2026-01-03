@@ -6,8 +6,9 @@ import com.sky.entity.Dish;
 import com.sky.result.Result;
 import com.sky.service.DishService;
 import com.sky.vo.DishVO;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,7 +20,7 @@ import java.util.List;
 
 @RestController("userDishController")
 @RequestMapping("/user/dish")
-@Api(tags = "用户端-菜品相关接口")
+@Tag(name = "用户端-菜品相关接口")
 @Slf4j
 public class DishController {
 
@@ -28,7 +29,7 @@ public class DishController {
 
 
     @GetMapping("/list")
-    @ApiOperation("依据categoryId获取菜品列表")
+    @Operation(summary = "依据categoryId获取菜品列表")
     public Result<List<DishVO>> listDishes(@RequestParam Long categoryId){
 
         String dishKey = RedisKeysConstant.DISH_BY_CATERGORYID_KEY + categoryId;
