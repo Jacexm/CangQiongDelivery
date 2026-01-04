@@ -27,8 +27,15 @@ services:
       - ./config:/app/config:ro
 
     # 网络配置
+    # 方案1: 使用 host 网络模式（不推荐，会失去网络隔离）
+    # network_mode: host
+    # 或保持 bridge 模式
     networks:
       - sky-nginx_sky-network
+
+    # 方案2: 添加宿主机映射（推荐）⭐
+    extra_hosts:
+      - "host.docker.internal:host-gateway"  # Docker 20.10+ 自动解析为宿主机 IP
 
     # 健康检查
     healthcheck:
