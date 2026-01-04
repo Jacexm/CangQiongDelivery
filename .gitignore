@@ -6,7 +6,6 @@
 **/test
 application.properties
 logs/
-application.yml
 application-dev.yml
 TraceID_*.md
 markdown/INDEX.md

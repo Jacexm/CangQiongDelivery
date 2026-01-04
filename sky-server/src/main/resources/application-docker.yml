@@ -16,6 +16,15 @@ sky:
     port: ${REDIS_PORT:6379}
     password: ${REDIS_PASSWORD:}
     database: ${REDIS_DATABASE:0}
+  jwt:
+    # JWT Admin 配置 (从环境变量读取)
+    admin-secret-key: ${JWT_ADMIN_SECRET_KEY:default}
+    admin-ttl: ${JWT_ADMIN_TTL:3600000}
+    admin-token-name: ${JWT_ADMIN_TOKEN_NAME:default}
+    # JWT User 配置 (从环境变量读取)
+    user-secret-key: ${JWT_USER_SECRET_KEY:put_you_token}
+    user-ttl: ${JWT_USER_TTL:3600000}
+    user-token-name: ${JWT_USER_TOKEN_NAME:default_authentication}
   wechat:
     appid: ${WECHAT_APPID}
     secret: ${WECHAT_SECRET}
