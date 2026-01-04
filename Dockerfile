@@ -45,7 +45,7 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 # 创建应用用户（安全最佳实践，Debian 语法）
 # 使用 --non-unique 或更高的 GID 来避免冲突
 RUN groupadd -g 10000 skyapp && \
-    useradd -r -u 10000 -g skyapp skyapp \
+    useradd -r -u 10000 -g skyapp skyapp
 
 
 # 设置工作目录
