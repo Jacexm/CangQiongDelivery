@@ -5,7 +5,7 @@ import com.sky.dto.ShoppingCartDTO;
 import com.sky.entity.ShoppingCart;
 import com.sky.result.Result;
 import com.sky.service.ShoppingCartService;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -26,7 +26,7 @@ public class ShoppingCartController {
      * @return
      */
     @PostMapping("/add")
-    @ApiOperation("添加购物车")
+    @Operation(summary = "添加购物车")
     public Result<String> addCart(@RequestBody ShoppingCartDTO shoppingCartDTO){
         shoppingCartService.addShoppingCart(shoppingCartDTO);
         return Result.success("添加购物车成功");
@@ -37,7 +37,7 @@ public class ShoppingCartController {
      * @return
      */
     @GetMapping("/list")
-    @ApiOperation("查看购物车")
+    @Operation(summary = "查看购物车")
     public Result<List<ShoppingCart>> list(){
         return Result.success(shoppingCartService.showShoppingCart());
     }
@@ -48,7 +48,7 @@ public class ShoppingCartController {
      * @return
      */
     @DeleteMapping("/clean")
-    @ApiOperation("清空购物车商品")
+    @Operation(summary = "清空购物车商品")
     public Result<String> clean(){
         shoppingCartService.cleanShoppingCart();
         return Result.success();

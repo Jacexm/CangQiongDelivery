@@ -6,7 +6,8 @@ import com.sky.entity.Category;
 import com.sky.result.PageResult;
 import com.sky.result.Result;
 import com.sky.service.CategoryService;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -18,7 +19,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/admin/category")
-@ApiOperation("分类相关接口")
+@Tag (name ="分类相关接口")
 @Slf4j
 public class CategoryController {
 
@@ -31,7 +32,7 @@ public class CategoryController {
      * @return
      */
     @PostMapping
-    @ApiOperation("新增分类")
+    @Operation(summary = "新增分类")
     public Result<String> addCategory(@RequestBody CategoryDTO categoryDTO){
         categoryService.addCategory(categoryDTO);
         return Result.success();
@@ -43,7 +44,7 @@ public class CategoryController {
      * @return 分页结果
      */
     @GetMapping("/page")
-    @ApiOperation("分类分页查询")
+    @Operation(summary = "分类分页查询")
     public Result<PageResult> pageQueryCategory(CategoryPageQueryDTO categoryPageQueryDTO){
         PageResult pageResult = categoryService.pageQuery(categoryPageQueryDTO);
         return Result.success(pageResult);
@@ -55,7 +56,7 @@ public class CategoryController {
      * @return
      */
     @DeleteMapping("/{id}")
-    @ApiOperation("根据id删除分类")
+    @Operation(summary = "根据id删除分类")
     public Result<String> deleteById(@PathVariable Long id){
         categoryService.deleteById(id);
         return Result.success();
@@ -67,7 +68,7 @@ public class CategoryController {
      * @return
      */
     @PutMapping
-    @ApiOperation("修改分类信息")
+    @Operation(summary = "修改分类信息")
     public Result<String> updateCategory(@RequestBody CategoryDTO categoryDTO) {
         categoryService.updateCategory(categoryDTO);
         return Result.success();
@@ -80,7 +81,7 @@ public class CategoryController {
      * @return
      */
     @PostMapping("/status/{status}")
-    @ApiOperation("修改分类状态")
+    @Operation(summary = "修改分类状态")
     public Result<String> changeCategoryStatus(@PathVariable Integer status, @RequestParam Long id) {
         categoryService.changeCategoryStatus(status, id);
         return Result.success();
@@ -92,7 +93,7 @@ public class CategoryController {
      * @return 分类列表
      */
     @GetMapping("/list")
-    @ApiOperation("根据类型查询分类")
+    @Operation(summary = "根据类型查询分类")
     public Result<List<Category>> queryByType(@RequestParam Integer type){
 //        log.info("根据类型查询分类：{}", type);
         List<Category> categoryList = categoryService.listByType(type);

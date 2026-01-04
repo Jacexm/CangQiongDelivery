@@ -1,0 +1,150 @@
+name: CI/CD Pipeline (Self-hosted Runner)
+
+on:
+  push:
+    branches:
+      - main
+      - master
+  workflow_dispatch: # 允许手动触发
+
+env:
+  JAVA_VERSION: '17'
+  MAVEN_OPTS: -Xmx2g
+
+jobs:
+  build-and-deploy:
+    runs-on: self-hosted  # 使用 Self-hosted Runner
+
+    steps:
+      # 1. 检出代码
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          clean: false  # 保留工作目录，加快速度
+
+#      # 2. 设置 Java 环境 (如果服务器已有 Java 可以跳过)
+#      - name: Set up JDK 17
+#        uses: actions/setup-java@v4
+#        with:
+#          java-version: ${{ env.JAVA_VERSION }}
+#          distribution: 'temurin'
+#          cache: 'maven'
+#
+#      # 3. Maven 构建
+#      - name: Build with Maven
+#        run: |
+#          echo "🏗️  Building project with Maven..."
+#          mvn clean package -DskipTests
+#          echo "✅ Build completed successfully"
+
+      # 4. 运行测试 (可选)
+      # - name: Run tests
+      #   run: mvn test
+
+      # 5. 检查 .env 文件
+      - name: Check environment file
+        run: |
+          if [ ! -f .env ]; then
+            echo "❌ Error: .env file not found!"
+            echo "Please create .env file on the server:"
+            echo "  cp .env.example .env"
+            echo "  vim .env"
+            exit 1
+          fi
+          echo "✅ .env file found"
+
+      # 6. 构建 Docker 镜像
+      - name: Build Docker image
+        run: |
+          echo "🐳 Building Docker image..."
+          docker-compose build
+          echo "✅ Docker image built successfully"
+
+      # 7. 停止旧容器
+      - name: Stop old containers
+        run: |
+          echo "🛑 Stopping old containers..."
+          docker-compose down || echo "No containers to stop"
+          echo "✅ Old containers stopped"
+
+      # 8. 启动新容器
+      - name: Start new containers
+        run: |
+          echo "🚀 Starting new containers..."
+          docker-compose up -d
+          echo "✅ New containers started"
+
+      # 9. 等待服务启动
+      - name: Wait for service to start
+        run: |
+          echo "⏳ Waiting for service to start (30 seconds)..."
+          sleep 30
+
+      # 10. 健康检查
+      - name: Health check
+        run: |
+          echo "🏥 Performing health check..."
+          
+          # 检查容器状态
+          if docker-compose ps | grep -q "sky-server.*Up"; then
+            echo "✅ Container is running"
+            docker-compose ps
+            
+            # 检查应用健康端点 (如果有)
+            if command -v curl &> /dev/null; then
+              HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:8080/actuator/health || echo "000")
+              if [ "$HTTP_CODE" == "200" ]; then
+                echo "✅ Application is healthy (HTTP $HTTP_CODE)"
+              else
+                echo "⚠️  Application health check returned HTTP $HTTP_CODE"
+              fi
+            fi
+          else
+            echo "❌ Container is not running!"
+            echo "Container status:"
+            docker-compose ps
+            echo "Recent logs:"
+            docker-compose logs --tail=50
+            exit 1
+          fi
+
+      # 11. 清理旧镜像
+      - name: Clean up old images
+        run: |
+          echo "🧹 Cleaning up old Docker images..."
+          docker image prune -f
+          echo "✅ Cleanup completed"
+
+      # 12. 显示部署信息
+      - name: Deployment summary
+        if: success()
+        run: |
+          echo "========================================="
+          echo "  ✅ Deployment completed successfully!"
+          echo "========================================="
+          echo ""
+          echo "📊 Container Status:"
+          docker-compose ps
+          echo ""
+          echo "📝 Recent Logs:"
+          docker-compose logs --tail=20
+          echo ""
+          echo "🌐 Service URLs:"
+          echo "  - API: http://localhost:8080"
+          echo "  - Swagger: http://localhost:8080/doc.html"
+          echo "  - Metrics: http://localhost:8080/actuator/prometheus"
+
+      # 13. 失败时显示详细日志
+      - name: Show logs on failure
+        if: failure()
+        run: |
+          echo "========================================="
+          echo "  ❌ Deployment failed!"
+          echo "========================================="
+          echo ""
+          echo "📊 Container Status:"
+          docker-compose ps
+          echo ""
+          echo "📝 Full Logs:"
+          docker-compose logs --tail=100
+

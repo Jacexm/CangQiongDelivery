@@ -11,7 +11,7 @@ import com.sky.result.Result;
 import com.sky.service.EmployeeService;
 import com.sky.utils.JwtUtil;
 import com.sky.vo.EmployeeLoginVO;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -81,7 +81,7 @@ public class EmployeeController {
      * @return
      */
     @PostMapping
-    @ApiOperation("新增员工")
+    @Operation(summary = "新增员工")
     public Result addEmployee(@RequestBody EmployeeDTO employeeDto){
 //        log.info("新增员工：{}",employeeDto);
         employeeService.save(employeeDto);
@@ -96,7 +96,7 @@ public class EmployeeController {
      * @return
      */
     @GetMapping ("/page")
-    @ApiOperation("员工分页查询")
+    @Operation(summary = "员工分页查询")
     public Result<PageResult> pageQueryEmployees(EmployeePageQueryDTO employeePageQueryDTO){
         log.info("员工分页查询：{}",employeePageQueryDTO);
         PageResult pageResult = employeeService.pageQuery(employeePageQueryDTO);
@@ -112,7 +112,7 @@ public class EmployeeController {
      * @return
      */
     @PostMapping("/status/{status}")
-    @ApiOperation("员工状态修改")
+    @Operation(summary = "员工状态修改")
     public Result<String> changeStatus(@PathVariable Integer status, @RequestParam Long id){
 //        log.info("修改员工状态：{},{}",status,id);
         employeeService.changeEmployeeStatus(status,id);
@@ -128,7 +128,7 @@ public class EmployeeController {
      * @return
      */
     @GetMapping("/{id}")
-    @ApiOperation("根据员工信息查询员工信息")
+    @Operation(summary = "根据员工信息查询员工信息")
     public Result<Employee> getById(@PathVariable Long id) {
 //    log.info("根据员工信息查询员工信息：{}", id);
     Employee employee = employeeService.getById(id);
@@ -137,7 +137,7 @@ public class EmployeeController {
     }
 
     @PutMapping
-    @ApiOperation("修改员工信息")
+    @Operation(summary = "修改员工信息")
     public Result updateEmployee(@RequestBody EmployeeDTO employeeDTO) {
 //        log.info("修改员工信息：{}", employeeDTO);
         employeeService.updateEmployee(employeeDTO);
