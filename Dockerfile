@@ -45,17 +45,22 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 # 创建应用用户（安全最佳实践，Debian 语法）
 # 使用 --non-unique 或更高的 GID 来避免冲突
 RUN groupadd -g 10000 skyapp && \
-    useradd -r -u 10000 -g skyapp skyapp
+    useradd -r -u 10000 -g skyapp skyapp \
+
 
 # 设置工作目录
 WORKDIR /app
 
 # 创建必要的目录
 RUN mkdir -p /app/logs /app/config && \
-    chown -R skyapp:skyapp /app
+    chown -R skyapp:skyapp /app &&\
+    chmod -R 755 /app
 
 # 从构建阶段复制 jar 文件
 COPY --from=builder /build/sky-server/target/*.jar /app/app.jar
+
+# **重要**: 复制后再次设置权限
+RUN chown skyapp:skyapp /app/app.jar
 
 # 切换到非 root 用户
 USER skyapp
